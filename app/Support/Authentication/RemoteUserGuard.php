@@ -78,10 +78,8 @@ class RemoteUserGuard implements Guard
         $header = config('auth.guard_header', 'REMOTE_USER');
         $userID = request()->server($header) ?? null;
 
-        if (function_exists('apache_request_headers')) {
-            Log::debug('Use apache_request_headers to find user ID.');
-            $userID = request()->server($header) ?? apache_request_headers()[$header] ?? null;
-        }
+        Log::warning(sprintf('found user %s', $userID));
+        Log::warning(sprintf('all headers %s', print_r(request()->server(), true)));
 
         if (null === $userID || '' === $userID) {
             Log::error(sprintf('No user in header "%s".', $header));
